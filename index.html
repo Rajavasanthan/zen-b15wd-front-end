@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul id="studetList"></ul>
+    <form onsubmit="addStudent()">
+         <input type="text" id="name" required/>
+         <input type="submit" value="Submit">
+    </form>
+    <script>
+      async function addStudent() {
+        var data = {
+          name: document.getElementById("name").value,
+        };
+        await fetch("https://demo-zen-app2.herokuapp.com/student", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        alert("Done")
+      }
+      async function getStudentList() {
+        let studetData;
+        try {
+          let studetFetch = await fetch("https://demo-zen-app2.herokuapp.com/students");
+          studetData = await studetFetch.json();
+        } catch (error) {
+          console.log(error);
+        }
+
+        studetData.forEach((student) => {
+          let li = document.createElement("li");
+          li.innerHTML = student.name;
+          document.getElementById("studetList").appendChild(li);
+        });
+      }
+
+      getStudentList();
+    </script>
+  </body>
+</html>
